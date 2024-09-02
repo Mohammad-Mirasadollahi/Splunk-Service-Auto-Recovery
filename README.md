@@ -36,28 +36,21 @@ In the context of the script, there are several variables that you can (optional
 
 **Quick Start Guide:**
 
-0. Make sure you are login as root.
-   
- ```
- sudo -i
-   ```
-
 1. First, download the repository.
    
  ```
- git clone https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery.git
+ wget https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery/releases/download/Splunk/Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
    ```
 2. Move all of them into the `/root/scripts` directory. If the directory does not exist, create it.
 
  ```
-cd Splunk-Service-Auto-Recovery
 mkdir -p /root/scripts
-mv Splunk-Service-Auto-Recovery_Scripts.tar.gz /root/scripts/
+mv Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz /root/scripts/
    ```
 3. Go to the /root/scripts/ directory and then, run the following command.
 ```
 cd /root/scripts/
-tar xzvf Splunk-Service-Auto-Recovery_Scripts.tar.gz
+tar xzvf Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
    ```
 4. Then, just run the following command.
 ```
