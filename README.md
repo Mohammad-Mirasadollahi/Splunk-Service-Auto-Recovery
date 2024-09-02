@@ -1,6 +1,8 @@
 # Splunk Service Auto Recovery
 This script is designed to monitor and automatically recover a Splunk service. It continuously checks (30s) the status of the Splunk service by verifying its response on critical ports (443 and 8089) and ensuring the splunkd process is running. If any of these checks fail, the script logs the specific issue and attempts to recover the service by restarting it. The script makes multiple attempts to start or restart the service and logs each step with timestamps and unique process IDs. It runs in an infinite loop, ensuring the Splunk service remains operational with minimal downtime.
 
+**Note:** These scripts were developed with the help of ChatGPT and have been tested successfully without any issues.
+
 # Script Workflow
 
 1. **Initial Service Check**: The script checks the Splunk service status by:
