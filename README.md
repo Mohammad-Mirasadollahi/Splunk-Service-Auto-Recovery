@@ -51,6 +51,7 @@ mv Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz /root/scripts/
 ```
 cd /root/scripts/
 tar xzvf Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
+rm -rf Splunk_Frozen_Retention_Policy_Scripts_v1.0.0.tar.gz
    ```
 4. Then, just run the following command.
 ```
