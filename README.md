@@ -28,7 +28,7 @@ This script is designed to monitor and automatically recover a Splunk service. I
 ## Variables
 In the context of the script, there are several variables that you can (optional) change it based on your environment.
 
-**SPLUNK_PATH=**"/splunk/opt/splunk/bin": Splunk installation path
+**SPLUNK_PATH=**"/opt/splunk/bin": Splunk installation path
 
 **LOG_FILE=**"/var/log/Splunk_Status.log": Script Log file path
 
