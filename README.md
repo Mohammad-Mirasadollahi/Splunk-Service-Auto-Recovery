@@ -1,9 +1,15 @@
 # Splunk Service Auto Recovery
-This script is designed to monitor and automatically recover a Splunk service. It continuously checks (30s) the status of the Splunk service by verifying its response on critical ports (443 and 8089) and ensuring the splunkd process is running. If any of these checks fail, the script logs the specific issue and attempts to recover the service by restarting it. The script makes multiple attempts to start or restart the service and logs each step with timestamps and unique process IDs. It runs in an infinite loop, ensuring the Splunk service remains operational with minimal downtime.
+
+⚠️ **IMPORTANT: Non-Root User Requirement**
+In modern and secure Splunk environments, running Splunk services as the `root` user is strictly prohibited. This script is fully optimized to run under a specific non-root user (e.g., `splunk`). The installation script will automatically set up the systemd service to execute under the defined user and will adjust the required file permissions accordingly. **You must ensure the `SPLUNK_USER` variable in the installation script matches your actual Splunk user.**
+
+---
+
+This script is designed to monitor and automatically recover a Splunk service. It continuously checks (30s) the status of the Splunk service by verifying its response on critical ports (443 and 8089) and ensuring the `splunkd` process is running. If any of these checks fail, the script logs the specific issue and attempts to recover the service by restarting it. The script makes multiple attempts to start or restart the service and logs each step with timestamps, target user, and unique process IDs. It runs in an infinite loop, ensuring the Splunk service remains operational with minimal downtime.
 
 **Note:** These scripts were developed with the help of ChatGPT and have been tested successfully without any issues.
 
-# Script Workflow
+## Script Workflow
 
 1. **Initial Service Check**: The script checks the Splunk service status by:
    - **Port 443 Check**: Ensuring the service responds with "303 See Other" and "Server: Splunkd."
@@ -26,38 +32,51 @@ This script is designed to monitor and automatically recover a Splunk service. I
 6. **Loop Continues**: The script waits 30 seconds and repeats the monitoring loop.
 
 ## Variables
-In the context of the script, there are several variables that you can (optional) change it based on your environment.
+In the context of the scripts, there are several variables that you can (and should) change based on your environment.
 
-**SPLUNK_PATH=**"/opt/splunk/bin": Splunk installation path
+**In the Installation Script (`Splunk_Status_Monitor_Service.sh`):**
+- **SPLUNK_USER=**`"splunk"`: The specific OS user running your Splunk instance.
+- **SPLUNK_GROUP=**`"splunk"`: The specific OS group for your Splunk instance.
+- **SCRIPT_DIR=**`"/opt/splunk/scripts"`: The directory where the monitoring script is located.
 
-**LOG_FILE=**"/var/log/Splunk_Status.log": Script Log file path
+**In the Monitoring Script (`Splunk_Status_Monitor.sh`):**
+- **SPLUNK_PATH=**`"/opt/splunk/bin"`: Splunk binary installation path.
+- **LOG_FILE=**`"/opt/splunk/var/log/Splunk_Status_Monitor.log"`: Script Log file path (Moved here to ensure the `splunk` user has write permissions).
 
-# Quick Start
-
-**Quick Start Guide:**
+## Quick Start Guide
 
 1. First, download the repository.
-   
- ```
- wget https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery/releases/download/Splunk/Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
+   ```bash
+   wget https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery/releases/download/Splunk/Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
    ```
-2. Move all of them into the `/root/scripts` directory. If the directory does not exist, create it.
 
- ```
-mkdir -p /root/scripts
-mv Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz /root/scripts/
+2. Create a specific directory inside the Splunk path and move the downloaded file there. *(Running scripts from `/root/` is avoided since the `splunk` user cannot access it).*
+   ```bash
+   sudo mkdir -p /opt/splunk/scripts
+   sudo mv Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz /opt/splunk/scripts/
    ```
-3. Go to the /root/scripts/ directory and then, run the following command.
-```
-cd /root/scripts/
-tar xzvf Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
-rm -rf Splunk-Service-Auto-Recovery_Scripts_v1.0.0.tar.gz
+
+3. Go to the new directory and extract the files.
+   ```bash
+   cd /opt/splunk/scripts/
+   sudo tar xzvf Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
+   sudo rm -rf Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
    ```
-4. Then, just run the following command.
-```
-bash ./Splunk_Status_Monitor_Service.sh
+
+4. **(Optional but Recommended):** Open `Splunk_Status_Monitor_Service.sh` and ensure `SPLUNK_USER` and `SPLUNK_GROUP` variables match your environment.
+
+5. Run the installation script. **(You must run this with `sudo` or as root to create systemd services, but the monitor itself will be configured to run as the Splunk user).**
+   ```bash
+   sudo bash ./Splunk_Status_Monitor_Service.sh
    ```
-5. Finally, check the service status.
-```
-service Splunk_Status_Monitor status
+
+6. Finally, check the service and timer status to ensure everything is running smoothly.
+   ```bash
+   sudo systemctl status Splunk_Status_Monitor.service
+   sudo systemctl status Splunk_Status_Monitor.timer
+   ```
+
+7. You can also monitor the live logs using:
+   ```bash
+   tail -f /opt/splunk/var/log/Splunk_Status_Monitor.log
    ```
