@@ -56,11 +56,15 @@ In the context of the scripts, there are several variables that you can (and sho
    sudo mv Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz /opt/splunk/scripts/
    ```
 
-3. Go to the new directory and extract the files.
+3. Go to the new directory, extract the files, and **set the correct ownership**. 
+   *Note: Because you created the folder using `sudo`, it is owned by `root`. You must change the ownership to your Splunk user so the monitoring service can read and execute the files.*
    ```bash
    cd /opt/splunk/scripts/
    sudo tar xzvf Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
    sudo rm -rf Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
+   
+   # Important: Change ownership to your Splunk user and group (default is 'splunk')
+   sudo chown -R splunk:splunk /opt/splunk/scripts/
    ```
 
 4. **(Optional but Recommended):** Open `Splunk_Status_Monitor_Service.sh` and ensure `SPLUNK_USER` and `SPLUNK_GROUP` variables match your environment.
