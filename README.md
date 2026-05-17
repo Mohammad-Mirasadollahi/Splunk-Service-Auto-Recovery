@@ -47,7 +47,7 @@ In the context of the scripts, there are several variables that you can (and sho
 
 1. First, download the repository.
    ```bash
-   wget https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery/releases/download/Splunk/Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
+   wget https://github.com/Mohammad-Mirasadollahi/Splunk-Service-Auto-Recovery/releases/download/v1.1.0/Splunk-Service-Auto-Recovery_Scripts_v1.1.0.tar.gz
    ```
 
 2. Create a specific directory inside the Splunk path and move the downloaded file there. *(Running scripts from `/root/` is avoided since the `splunk` user cannot access it).*
