@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Log file path
-LOG_FILE="/var/log/Splunk_Status.log"
+# Log file path (Changed to be writable by 'splunk' user)
+LOG_FILE="/opt/splunk/var/log/Splunk_Status_Monitor.log"
 
 # Splunk installation path
 SPLUNK_PATH="/opt/splunk/bin"
+
+# Get Current User running the script
+CURRENT_USER=$(whoami)
 
 # Function to generate process_id
 generate_process_id() {
@@ -15,8 +18,11 @@ generate_process_id() {
 log_message() {
     local message="$1"
     local process_id="$2"
-    echo "timestamp=\"$(date '+%Y-%m-%d %H:%M:%S %Z')\" process_id=\"$process_id\" message=\"$message\"" >> $LOG_FILE
+    echo "timestamp=\"$(date '+%Y-%m-%d %H:%M:%S %Z')\" process_id=\"$process_id\" user=\"$CURRENT_USER\" message=\"$message\"" >> $LOG_FILE
 }
+
+# Log script startup and user info
+log_message "Splunk Monitor Script Started. Running as user: $CURRENT_USER" "STARTUP"
 
 # Function to check the service status
 check_service() {
@@ -53,7 +59,7 @@ check_service() {
 # Function to start Splunk service
 start_splunk() {
     log_message "Starting Splunk service..." "$1"
-    $SPLUNK_PATH/splunk start
+    $SPLUNK_PATH/splunk start --accept-license --answer-yes
 }
 
 # Function to restart Splunk service
